@@ -1,16 +1,19 @@
-#include <Arduino.h>            // In-built
-#include <esp_task_wdt.h>       // In-built
+#include <Arduino.h>       // In-built
+#include <ArduinoJson.h>   // https://github.com/bblanchon/ArduinoJson
+#include <HTTPClient.h>    // In-built
+#include <SPI.h>           // In-built
+#include <WiFi.h>          // In-built
+#include <esp_task_wdt.h>  // In-built
+#include <time.h>          // In-built
+
+#include "epd_driver.h"   // https://github.com/Xinyuan-LilyGO/LilyGo-EPD47
+#include "esp_adc_cal.h"  // In-built
+#include "forecast_record.h"
 #include "freertos/FreeRTOS.h"  // In-built
 #include "freertos/task.h"      // In-built
-#include "epd_driver.h"         // https://github.com/Xinyuan-LilyGO/LilyGo-EPD47
-#include "esp_adc_cal.h"        // In-built
-#include <ArduinoJson.h>        // https://github.com/bblanchon/ArduinoJson
-#include <HTTPClient.h>         // In-built
-#include <WiFi.h>               // In-built
-#include <SPI.h>                // In-built
-#include <time.h>               // In-built
-#include "user_settings.h"
-#include "forecast_record.h"
+
+// copied user_settings.h to user_settings_local.h and added this to .gitignore privacy reasons
+#include "user_settings_local.h"
 
 #define SCREEN_WIDTH   EPD_WIDTH
 #define SCREEN_HEIGHT  EPD_HEIGHT
@@ -48,9 +51,10 @@ float humidity_readings[max_readings]    = {0};
 float rain_readings[max_readings]        = {0};
 float snow_readings[max_readings]        = {0};
 
-long SleepDuration   = 20; // Sleep time in minutes, aligned to the nearest minute boundary, so if 30 will always update at 00 or 30 past the hour
-int  WakeupHour      = 6;  // Wakeup after 06:00 to save battery power
-int  SleepHour       = 23; // Sleep  after 23:00 to save battery power
+long SleepDuration = 30;  // Sleep time in minutes, aligned to the nearest minute boundary, so if 30
+                          // will always update at 00 or 30 past the hour
+int WakeupHour = 6;       // Wakeup after 06:00 to save battery power
+int SleepHour = 22;       // Sleep  after 23:00 to save battery power
 long StartTime       = 0;
 long SleepTimer      = 0;
 long Delta           = 30; // ESP32 rtc speed compensation, prevents display at xx:59:yy and then xx:00:yy (one minute later) to save power
