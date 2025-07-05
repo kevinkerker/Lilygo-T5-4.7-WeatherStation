@@ -1,18 +1,21 @@
 Weather Station and Mosquitto MQTT Values for LilyGO T5 4.7 inch e-paper display
 =======================================
 
-This project works with LilyGO T5 4.7 inch e-paper EPD display as available from [AliExpress](https://aliexpress.com/item/1005002272417292.html) and [OpenWeatherMap (OMW)](https://home.openweathermap.org) as ESP32 weather display.
+This project works with LilyGO T5 4.7 inch e-paper EPD display as available from [Lilygo](https://lilygo.cc/) and [OpenWeatherMap (OMW)](https://home.openweathermap.org) as ESP32 weather display.
 
 ![](./assets/LilyGoWeatherStation.jpg)
 
 ## Compiling and flashing
 Edit user_settings.h and enter OWM API key as well as the location for which you want to display the weather data.
 
-To compile you will need following libraries  
+To compile you will need following libraries.
 - https://github.com/Xinyuan-LilyGO/LilyGo-EPD47
 - https://github.com/bblanchon/ArduinoJson  
 
-In board manager choose ESP32 Dev Module with PSRAM Enabled.  
+You can add those via the library Manager
+Please note that you need Arduino ESP32 V 2.0.5 or above and below V3.0 for LilyGo-EPD47 to work. v2.0.15 is reommended.
+
+In board manager choose ESP32 Dev Module with PSRAM Enabled. If you have the S3 version choose ESP32S3 Dev Module and enable PSRAM OPI.
 The project is configured as PlatformIO Project (Visual Studio Code AddIn) - to compile with arduino IDE rename src folder to OWM_EPD47.
 
 ## LilyGO T5 Display FAQ
