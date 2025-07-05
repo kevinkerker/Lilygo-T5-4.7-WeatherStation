@@ -181,7 +181,7 @@ void Convert_Readings_to_Imperial() { // Only the first 3-hours are used
 
 bool DecodeWeather(WiFiClient& json, String Type) {
   Serial.print(F("\nDeserializing json... "));
-  DynamicJsonDocument doc(64 * 1024);                      // allocate the JsonDocument
+  auto doc = DynamicJsonDocument(64 * 1024);                     // allocate the JsonDocument
   DeserializationError error = deserializeJson(doc, json); // Deserialize the JSON document
   if (error) {                                             // Test if parsing succeeds.
     Serial.print(F("deserializeJson() failed: "));
@@ -205,8 +205,8 @@ bool DecodeWeather(WiFiClient& json, String Type) {
     WxConditions[0].Visibility  = root["visibility"].as<int>();                    Serial.println("Visi: " + String(WxConditions[0].Visibility));
     WxConditions[0].Windspeed   = root["wind"]["speed"].as<float>();               Serial.println("WSpd: " + String(WxConditions[0].Windspeed));
     WxConditions[0].Winddir     = root["wind"]["deg"].as<float>();                 Serial.println("WDir: " + String(WxConditions[0].Winddir));
-    WxConditions[0].Forecast0   = root["weather"][0]["description"].as<char*>();      Serial.println("Fore: " + String(WxConditions[0].Forecast0));
-    WxConditions[0].Icon        = root["weather"][0]["icon"].as<char*>();             Serial.println("Icon: " + String(WxConditions[0].Icon));
+    WxConditions[0].Forecast0   = root["weather"][0]["description"].as<const char*>();      Serial.println("Fore: " + String(WxConditions[0].Forecast0));
+    WxConditions[0].Icon        = root["weather"][0]["icon"].as<const char*>();             Serial.println("Icon: " + String(WxConditions[0].Icon));
   }
   if (Type == "forecast") {
     //Serial.println(json);
@@ -220,7 +220,7 @@ bool DecodeWeather(WiFiClient& json, String Type) {
       WxForecast[r].High              = list[r]["main"]["temp_max"].as<float>();   Serial.println("THig: " + String(WxForecast[r].High));
       WxForecast[r].Pressure          = list[r]["main"]["pressure"].as<float>();   Serial.println("Pres: " + String(WxForecast[r].Pressure));
       WxForecast[r].Humidity          = list[r]["main"]["humidity"].as<float>();   Serial.println("Humi: " + String(WxForecast[r].Humidity));
-      WxForecast[r].Icon              = list[r]["weather"][0]["icon"].as<char*>(); Serial.println("Icon: " + String(WxForecast[r].Icon));
+      WxForecast[r].Icon              = list[r]["weather"][0]["icon"].as<const char*>(); Serial.println("Icon: " + String(WxForecast[r].Icon));
       WxForecast[r].Rainfall          = list[r]["rain"]["3h"].as<float>();         Serial.println("Rain: " + String(WxForecast[r].Rainfall));
       WxForecast[r].Snowfall          = list[r]["snow"]["3h"].as<float>();         Serial.println("Snow: " + String(WxForecast[r].Snowfall));
       if (r < 8) { // Check next 3 x 8 Hours = 1 day
@@ -688,7 +688,7 @@ boolean UpdateLocalTime() {
 void DrawBattery(int x, int y) {
   uint8_t percentage = 100;
   esp_adc_cal_characteristics_t adc_chars;
-  esp_adc_cal_value_t val_type = esp_adc_cal_characterize(ADC_UNIT_1, ADC_ATTEN_DB_11, ADC_WIDTH_BIT_12, 1100, &adc_chars);
+  esp_adc_cal_value_t val_type = esp_adc_cal_characterize(ADC_UNIT_1, ADC_ATTEN_DB_12, ADC_WIDTH_BIT_12, 1100, &adc_chars);
   if (val_type == ESP_ADC_CAL_VAL_EFUSE_VREF) {
     Serial.printf("eFuse Vref:%u mV\n", adc_chars.vref);
     vref = adc_chars.vref;
@@ -1004,15 +1004,15 @@ void DrawGraph(int x_pos, int y_pos, int gwidth, int gheight, float Y1Min, float
   }
 }
 
-void drawString(int x, int y, String text, alignment align) {
+void drawString(int32_t x, int32_t y, String text, alignment align) {
   char * data  = const_cast<char*>(text.c_str());
-  int  x1, y1; //the bounds of x,y and w and h of the variable 'text' in pixels.
-  int w, h;
-  int xx = x, yy = y;
+  int32_t  x1, y1; //the bounds of x,y and w and h of the variable 'text' in pixels.
+  int32_t w, h;
+  int32_t xx = x, yy = y;
   get_text_bounds(&currentFont, data, &xx, &yy, &x1, &y1, &w, &h, NULL);
   if (align == RIGHT)  x = x - w;
   if (align == CENTER) x = x - w / 2;
-  int cursor_y = y + h;
+  int32_t cursor_y = y + h;
   write_string(&currentFont, data, &x, &cursor_y, framebuffer);
 }
 
