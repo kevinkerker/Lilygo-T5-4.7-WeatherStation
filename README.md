@@ -1,18 +1,21 @@
 Weather Station and Mosquitto MQTT Values for LilyGO T5 4.7 inch e-paper display
 =======================================
 
-This project works with LilyGO T5 4.7 inch e-paper EPD display as available from [AliExpress](https://aliexpress.com/item/1005002272417292.html) and [OpenWeatherMap (OMW)](https://home.openweathermap.org) as ESP32 weather display.
+This project works with LilyGO T5 4.7 inch e-paper EPD display as available from [Lilygo](https://lilygo.cc/) and [OpenWeatherMap (OMW)](https://home.openweathermap.org) as ESP32 weather display.
 
 ![](./assets/LilyGoWeatherStation.jpg)
 
 ## Compiling and flashing
 Edit user_settings.h and enter OWM API key as well as the location for which you want to display the weather data.
 
-To compile you will need following libraries  
+To compile you will need following libraries.
 - https://github.com/Xinyuan-LilyGO/LilyGo-EPD47
 - https://github.com/bblanchon/ArduinoJson  
 
-In board manager choose ESP32 Dev Module with PSRAM Enabled.  
+You can add those via the library Manager
+Please note that you need Arduino ESP32 V 2.0.5 or above and below V3.0 for LilyGo-EPD47 to work. v2.0.15 is reommended.
+
+In board manager choose ESP32 Dev Module with PSRAM Enabled. If you have the S3 version choose ESP32S3 Dev Module and enable PSRAM OPI.
 The project is configured as PlatformIO Project (Visual Studio Code AddIn) - to compile with arduino IDE rename src folder to OWM_EPD47.
 
 ## LilyGO T5 Display FAQ
@@ -35,3 +38,9 @@ The original code created by https://github.com/G6EJD/ is using the GPLv3 https:
 > Yes, because the program actually links to the library. As such, the terms of the GPL apply to the entire combination. The software modules that link with the library may be under various GPL compatible licenses, but the work as a whole must be licensed under the GPL.
 
 This means that the original proprietary license that G6EJD tried to enforce is unlawful as it is not compatible with the GPLv3 and removed from this fork, while keeping the attribution and all the copyright of the original creator.
+
+## Support my work ...
+**with caffeine:**  
+
+<a href="https://www.buymeacoffee.com/cybdis" target="_blank">
+  <img src="https://raw.githubusercontent.com/CybDis/CybDis/main/bmc-yellow-button.png" height="60px"/></a>
